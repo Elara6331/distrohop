@@ -6,9 +6,9 @@ steps:
     image: gcr.io/go-containerregistry/crane:debug
     entrypoint: ["/busybox/sh", "-c", "echo $CI_SCRIPT | base64 -d | /busybox/sh -e"]
     commands:
-      - crane auth login -u elara6331 -p $REGISTRY_TOKEN gitea.elara.ws
-      - crane index append -m gitea.elara.ws/elara6331/distrohop:amd64 -m gitea.elara.ws/elara6331/distrohop:arm64 -t gitea.elara.ws/elara6331/distrohop:latest
-      - crane index append -m gitea.elara.ws/elara6331/distrohop:amd64 -m gitea.elara.ws/elara6331/distrohop:arm64 -t gitea.elara.ws/elara6331/distrohop:${CI_COMMIT_TAG}
+      - "crane auth login -u elara6331 -p $REGISTRY_TOKEN gitea.elara.ws"
+      - "crane index append -m gitea.elara.ws/elara6331/distrohop:amd64 -m gitea.elara.ws/elara6331/distrohop:arm64 -t gitea.elara.ws/elara6331/distrohop:latest"
+      - "crane index append -m gitea.elara.ws/elara6331/distrohop:amd64 -m gitea.elara.ws/elara6331/distrohop:arm64 -t gitea.elara.ws/elara6331/distrohop:${CI_COMMIT_TAG}"
     environment:
       REGISTRY_TOKEN:
         from_secret: gitea_token
