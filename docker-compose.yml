@@ -1,0 +1,27 @@
+services:
+  distrohop:
+    image: gitea.elara.ws/elara6331/distrohop
+    ports:
+      - 8080:8080
+    volumes:
+      - ./data:/data
+      # Uncomment this if you'd like to use a config file instead of environment variables
+      # - ./distrohop.toml:/distrohop.toml 
+    environment:
+      DISTROHOP_SEARCH_THREADS: 4
+      # Debian Bookworm
+      DISTROHOP_REPO_0_NAME: debian-bookworm
+      DISTROHOP_REPO_0_REFRESH_SCHEDULE: 0 0 * * *
+      DISTROHOP_REPO_0_TYPE: apt
+      DISTROHOP_REPO_0_BASE_URL: http://ftp.us.debian.org/debian
+      DISTROHOP_REPO_0_VERSION: bookworm
+      DISTROHOP_REPO_0_REPOS: main,non-free,contrib
+      DISTROHOP_REPO_0_ARCH: amd64,all
+      # Fedora 40
+      DISTROHOP_REPO_1_NAME: fedora-40
+      DISTROHOP_REPO_1_REFRESH_SCHEDULE: 15 0 * * *
+      DISTROHOP_REPO_1_TYPE: dnf
+      DISTROHOP_REPO_1_BASE_URL: https://dl.fedoraproject.org
+      DISTROHOP_REPO_1_VERSION: 40
+      DISTROHOP_REPO_1_REPOS: Everything
+      DISTROHOP_REPO_1_ARCH: x86_64

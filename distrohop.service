@@ -1,0 +1,11 @@
+[Unit]
+Description=distrohop
+After=network.target
+
+[Service]
+ExecStart=distrohop
+Restart=always
+StandardOutput=journal
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,28 @@
+#macro("content"):
+    <div class="block">
+        <p class="is-size-4 mb-1">What is Distrohop?</p>
+        <p>
+            Distrohop lets you look up a package from a Linux distro's repositories and find the equivalent package in another distro's repositories.
+            It also lets you look up a package by its contents. For example, you can look up
+            <span class="tags has-addons is-inline-block m-0">
+                <span class="tag is-dark has-background-info-dark has-text-info-light">bin</span><span class="tag is-dark">nano</span>
+            </span>
+            and get a list of packages that contain the <code>nano</code> command.
+        </p>
+    </div>
+    <div class="block">
+        <p class="is-size-4 mb-1">Why is Distrohop?</p>
+        <p>Distrohop has many use cases. It can be used to figure out which package has the command, library, service, etc. you need. It can also be used to figure out the names of equivalent packages between different distros, which is extremely useful when you're trying to figure out dependencies for packaging software.</p>
+    </div>
+    <div class="block">
+        <p class="is-size-4 mb-1">How is Distrohop?</p>
+        <p class="mb-2">Distrohop works by downloading and decoding a file index from each supported repo. It analyzes the information contained in the index to form a generalized list of tags describing the contents of each package, and then stores that list in a database.</p>
+        <p>When you search for a package from another distro, it resolves the package name to its list of tags, and then searches for any packages that match at least one tag in the other distro's repos. It calculates a confidence score based on how many of the tags match, and then sorts the results by confidence.</p>
+    </div>
+    <div class="block">
+        <p class="is-size-4 mb-1">Why is my search so slow?</p>
+        <p>Each repo can have tens of millions of tags that Distrohop has to churn through. It uses LSM trees and bloom filters to speed the search up as much as possible, and most searches can be measured in milliseconds, but for some searches that contain lots of tags, there may not be any shortcut and Distrohop may have to scan through all or most of the tags stored in the database, which can take a significant amount of time.</p>
+    </div>
+#!macro
+
+#include("base.html", page = "About")

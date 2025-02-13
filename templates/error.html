@@ -1,0 +1,16 @@
+#macro("content"):
+    <div class="container has-text-centered">
+        <div class="image is-96x96 is-inline-block has-text-danger m-0">#icon("weui/error-outlined")</div>
+        <p class="is-size-4 has-text-danger">#(err)</p>
+        <div class="is-inline-block">
+            <a href="javascript:window.history.back()">
+                <div class="icon-text has-text-centered">
+                    <span class="icon is-aligned">#icon("ri/arrow-left-line")</span>
+                    <span>Go Back</span>
+                </div>
+            </a>
+        </div>
+    </div>
+#!macro
+
+#include("base.html", page = "Error")

@@ -1,0 +1,163 @@
+#macro("head"):
+<script>
+  async function getSuggestions(repo, input) {
+    input = input.trim();
+    if (repo.length == 0 || input.length == 0) return [];
+    const res = await fetch("/suggestions?" + new URLSearchParams({
+      'input': input,
+      'repo': repo,
+    }))
+    if (!res.ok) {
+        let resData = await res.json();
+        throw new Error(`[suggestions] ${resData.error} (HTTP ${res.status})`)
+    }
+    return await res.json();
+  }
+  
+  function pushTag(tags, input) {
+    const splitTag = input.value.split('=');
+    if (splitTag.length != 2) {
+      input.classList.add('is-danger');
+    } else {
+      input.classList.remove('is-danger');
+      tags.push(splitTag);
+      input.value = "";
+    }
+  }
+</script>
+#!macro
+
+#macro("content"):
+<div class="is-flex is-flex-direction-column is-align-items-center image is-16x9 mb-4">
+    <img src="/assets/logo/distrohop.svg" style="max-width: 500px" alt="Distrohop Logo">
+</div>
+
+<section 
+    x-data="{activeTab: new URLSearchParams(location.search).get('tab') || 'pkg', nav: false}"
+    x-init="$watch('activeTab', (val) => {
+        if (nav) {
+            nav = false;
+            return;
+        }
+        const url = new URL(window.location.href);
+        url.searchParams.set('tab', val);
+        history.pushState(null, document.title, url.toString());
+    })"
+    @popstate.window="nav = true; activeTab = new URLSearchParams(location.search).get('tab') || 'pkg'"
+>
+    <div class="tabs is-centered">
+        <ul>
+            <li :class="{'is-active': activeTab == 'pkg'}" @click="activeTab = 'pkg'"><a>Search by Package</a></li>
+            <li :class="{'is-active': activeTab == 'tags'}" @click="activeTab = 'tags'"><a>Search by Tags</a></li>
+        </ul>
+    </div>
+
+    <div x-cloak x-transition:enter x-show="activeTab == 'pkg'" class="columns">
+        <form x-data="{'suggestions': []}" class="column is-half is-offset-one-quarter has-text-centered" action="/search/pkg">
+            <label class="label" for="from">Search For:</label>
+            <div class="field has-addons is-align-self-stretch" id="from">
+                <div class="control">
+                    <span class="select">
+                        <select name="from" x-ref="from" class="is-clipped" autocomplete="off" required>
+                            <option selected disabled value="">Select Repo...</option>
+                            #for(repo in cfg.Repos):
+                                <option>#(repo.Name)</option>
+                            #!for
+                        </select>
+                    </span>
+                </div>
+                <div class="control is-expanded">
+                    <p @click.outside="suggestions = []">
+                        <input @keyup.debounce="suggestions = await getSuggestions($refs.from.value, $refs.pkg.value)" x-ref="pkg" class="input" name="pkg" type="text" placeholder="Package Name" autocomplete="off">
+                    </p>
+                    <div class="dropdown is-active" x-show="suggestions.length > 0" x-anchor.bottom-start="$refs.pkg" style="z-index: 1000; width: 100%">
+                        <div class="dropdown-content" style="width: 100%">
+                            <template x-for="suggestion in suggestions">
+                                <button @click.prevent="$refs.pkg.value = suggestion; suggestions = []" :title="suggestion" x-text="suggestion" class="dropdown-item is-clipped" style="text-overflow: ellipsis"></button>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <label class="label" for="in">In:</label>
+            <div class="field is-align-self-stretch" id="in">
+                <p class="control">
+                    <span class="select is-fullwidth">
+                        <select name="in" autocomplete="off" required>
+                            <option selected disabled value="">Select Repo...</option>
+                            #for(repo in cfg.Repos):
+                                <option>#(repo.Name)</option>
+                            #!for
+                        </select>
+                    </span>
+                </p>
+            </div>
+
+            <div class="field mt-4 is-align-self-stretch">
+                <p class="control">
+                    <button class="button is-dark is-rounded is-fullwidth" type="submit">
+                        <div class="icon-text">
+                            <span class="icon is-aligned m-0">#icon("map/search")</span>
+                            <span>Search</span>
+                        </div>
+                    </button>
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <div x-cloak x-data="{tags: []}" x-transition:enter x-show="activeTab == 'tags'" class="columns">
+        <div class="column is-half is-offset-one-quarter has-text-centered">
+            <form action="/search/tags" x-ref="tagsForm">
+                <div class="field is-grouped is-grouped-multiline">
+                    <template x-for="(tag, idx) in tags">
+                        <div>
+                            <div class="tags has-addons">
+                                <span class="tag is-dark has-background-info-dark has-text-info-light" x-text="tag[0]"></span><span class="tag is-dark" x-text="tag[1]"></span><a class="tag is-delete m-0" @click.prevent="tags.splice(idx, 1)"></a>
+                            </div>
+                            <input class="is-hidden" name="tag" :value="tag.join('=')">
+                        </div>
+                    </template>
+                    <span></span>
+                </div>
+                
+                <div class="mt-5 field has-addons">
+                    <div class="control is-expanded">
+                        <input @keydown.comma.prevent="pushTag(tags, $refs.newTagInput)" class="input" x-ref="newTagInput" placeholder="bin=nano">
+                    </div>
+                    <div class="control">
+                        <button class="button" @click.prevent="pushTag(tags, $refs.newTagInput)">
+                            <div class="icon-text">
+                                <span class="icon is-aligned m-0">#icon("icons8/plus")</span>
+                                <span>Add</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="field" id="in">
+                    <p class="control">
+                        <span class="select is-fullwidth">
+                            <select name="in" autocomplete="off" required>
+                                <option selected disabled value="">Select Repo...</option>
+                                #for(repo in cfg.Repos):
+                                    <option>#(repo.Name)</option>
+                                #!for
+                            </select>
+                        </span>
+                    </p>
+                </div>
+                
+                <button class="button is-dark is-rounded is-fullwidth" type="submit">
+                    <div class="icon-text">
+                        <span class="icon is-aligned m-0">#icon("map/search")</span>
+                        <span>Search</span>
+                    </div>
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+#!macro
+#include("base.html", page = "Search")

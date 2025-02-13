@@ -1,0 +1,19 @@
+.icon.is-aligned {
+    height:1em;
+    width:1em;
+    display: inline;
+    vertical-align: middle;
+}
+
+.icon.is-aligned svg {
+    height: 1em;
+    width: 1em;
+    top: .125em;
+    position: relative;
+}
+
+.pkg-tags:not(.is-active) > .tags:nth-child(10) ~ .tags {
+    display: none !important
+}
+
+[x-cloak] { display: none !important; }

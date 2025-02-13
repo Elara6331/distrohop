@@ -1,0 +1,73 @@
+#macro("content"):
+    <p class="title mb-0">Results</p>
+    #if(fromRepo == ""):
+        <div x-data="{active: false}">
+            <p class="subtitle mb-2">Searching for <a @click="active = true">tags</a> in <code>#(inRepo)</code></p>
+            <div x-show="active" x-transition class="modal is-active">
+                <div class="modal-background"></div>
+                <div class="modal-card" @click.outside="active = false">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Search Tags</p>
+                        <button class="delete" aria-label="close" @click="active = false"></button>
+                    </header>
+                    <div class="modal-card-body">
+                        <div class="field is-grouped is-grouped-multiline">
+                            #for(tag in tags):
+                                #(st = split(tag, "="))
+                                <div class="tags has-addons">
+                                    <span class="tag is-dark has-background-info-dark has-text-info-light">#(st[0])</span><span class="tag is-dark">#(st[1])</span>
+                                </div>
+                            #!for
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    #else:
+        <p class="subtitle mb-2">Searching for <code>#(pkgName)</code> from <code>#(fromRepo)</code> in <code>#(inRepo)</code></p>
+    #!if
+    <p class="is-size-7 has-text-grey">Found #(len(results)) packages in #(procTime)</p>
+    <hr>
+    #for(result in results):
+        <div class="card">
+            <header class="card-header">
+                <div class="card-header-title">
+                    <p>#(result.Package.Name)&nbsp;</p>
+                    <p class="has-text-primary" title="Confidence Score">(#(sprintf("%.2f", result.Confidence * 100))%)</p>
+                </div>
+                <a class="card-header-icon" href="/pkg/#(inRepo)/#(result.Package.Name)" title="See all tags">
+                    <span class="icon">#icon("gridicons/external")</span>
+                </a>
+            </header>
+            <div class="card-content">
+                <div x-data="{'active': false}" class="pkg-tags" x-ref="tags" :class="active && 'is-active'">
+                    #for(tag in result.Overlap):
+                        #(st = split(tag, "="))
+                        <div class="tags has-addons is-display-inline-block my-1 mx-1">
+                            <span class="tag is-dark has-background-info-dark has-text-info-light">#(st[0])</span><span class="tag is-dark">#(st[1])</span>
+                        </div>
+                    #!for
+                    <template x-if="$refs.tags.childElementCount > 11">
+                        <button class="tag is-inline-block is-dark has-background-primary-dark has-text-primary-light" @click="active = !active">
+                            <div class="icon-text">
+                                <template x-if="active">
+                                    <span class="icon is-aligned">#icon("ri/arrow-left-line")</span>
+                                </template>
+                                <span x-text="active ? 'Show Less' : 'Show More'"></span>
+                                <template x-if="!active">
+                                    <span class="icon is-aligned">#icon("ri/arrow-right-line")</span>
+                                </template>
+                            </div>
+                        </button>
+                    </template>
+                </div>
+            </div>
+        </div>
+    #!for
+    #if(len(results) == 0):
+        <p class="has-text-centered has-text-danger subtitle">No results found :(</p>
+    #!if
+#!macro
+
+#include("base.html", page = "Results")

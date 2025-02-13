@@ -1,0 +1,21 @@
+#macro("content"):
+    <a href="javascript:window.history.back()" class="is-block">
+        <div class="icon-text has-text-centered">
+            <span class="icon is-aligned">#icon("ri/arrow-left-line")</span>
+            <span>Back</span>
+        </div>
+    </a>
+    <p class="title">#(pkg.Name)</p>
+    <p class="subtitle">#(inRepo)</p>
+    
+    <ul>
+    #for(tag in pkg.Tags):
+        #(st = split(tag, "="))
+        <div class="tags has-addons my-1 mx-1">
+            <span class="tag mb-2 is-dark has-background-info-dark has-text-info-light">#(st[0])</span><span class="tag mb-2 is-dark">#(st[1])</span>
+        </div>
+    #!for
+    </ul>
+#!macro
+
+#include("base.html", page = "Package " + pkg.Name)

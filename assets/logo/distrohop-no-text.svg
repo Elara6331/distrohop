@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="39.675972mm"
+   height="44.827702mm"
+   viewBox="0 0 39.675972 44.827702"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   sodipodi:docname="distrohop-no-text.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="2.2263763"
+     inkscape:cx="123.06994"
+     inkscape:cy="133.17605"
+     inkscape:window-width="2000"
+     inkscape:window-height="1240"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient1"
+       inkscape:collect="always">
+      <stop
+         style="stop-color:#27b3e4;stop-opacity:1;"
+         offset="0"
+         id="stop1" />
+      <stop
+         style="stop-color:#4e3dd1;stop-opacity:1;"
+         offset="1"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1"
+       id="linearGradient2"
+       x1="14.370845"
+       y1="97.476159"
+       x2="69.117202"
+       y2="97.476159"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-115.35833,-95.249999)">
+    <g
+       id="g96"
+       style="fill:url(#linearGradient2);stroke:none;fill-opacity:1"
+       transform="matrix(0.72472351,0,0,0.72472351,104.94344,47.020586)">
+      <path
+         style="fill:url(#linearGradient2);fill-opacity:1;stroke:none;stroke-width:0.705556;stroke-linecap:square"
+         d="M 14.370845,113.54003 40.063381,128.40361 40.089371,98.620142 14.373443,83.743108 Z"
+         id="path95"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         style="fill:url(#linearGradient2);fill-opacity:1;stroke:none;stroke-width:0.705556;stroke-linecap:square"
+         d="M 41.688502,66.548708 15.982938,81.389745 41.776189,96.281485 67.505093,81.426898 Z"
+         id="path95-2"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         style="fill:url(#linearGradient2);fill-opacity:1;stroke:none;stroke-width:0.705556;stroke-linecap:square"
+         d="M 69.093798,113.5397 43.388301,128.38085 V 98.597387 L 69.117202,83.7428 Z"
+         id="path95-9" />
+    </g>
+  </g>
+</svg>

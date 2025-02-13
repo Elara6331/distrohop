@@ -1,0 +1,43 @@
+search_threads = 4
+
+[[repo]]
+    refresh_schedule = "0 0 * * *" # Every day at 12:00 AM
+	name = "debian-bookworm"
+	type = "apt"
+	base_url = "http://ftp.us.debian.org/debian"
+	version = "bookworm"
+	repos = ["main", "non-free", "contrib"]
+	arch = ["amd64", "all"]
+
+[[repo]]
+    refresh_schedule = "15 0 * * *" # Every day at 12:15 AM
+	name = "ubuntu-24.04"
+	type = "apt"
+	base_url = "http://mirror.math.ucdavis.edu/ubuntu"
+	version = "noble"
+	arch = ["amd64"]
+
+[[repo]]
+    refresh_schedule = "30 0 * * *" # Every day at 12:30 AM
+	name = "fedora-40"
+	type = "dnf"
+	base_url = "https://dl.fedoraproject.org"
+	version = "40"
+	repos = ["Everything"]
+	arch = ["x86_64"]
+
+[[repo]]
+    refresh_schedule = "45 0 * * *" # Every day at 12:45 AM
+	name = "archlinux"
+	type = "pacman"
+	base_url = "https://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch"
+	repos = ["extra", "core", "multilib"]
+	arch = ["x86_64"]
+
+[[repo]]
+    refresh_schedule = "0 1 * * *" # Every day at 1:00 AM
+	name = "chaotic-aur"
+	type = "pacman"
+	base_url = "https://mirror.theash.xyz/chaotic-aur/$repo/$arch"
+	repos = ["chaotic-aur"]
+	arch = ["x86_64"]
