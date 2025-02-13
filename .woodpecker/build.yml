@@ -1,0 +1,53 @@
+matrix:
+  platform:
+    - linux/amd64
+    - linux/arm64
+    
+labels:
+  platform: ${platform}
+
+steps:
+  - name: build
+    image: golang:1.23.6
+    commands:
+      - go build
+    when:
+      - event: tag
+
+  - name: docker
+    image: woodpeckerci/plugin-kaniko
+    settings:
+      registry: gitea.elara.ws
+      repo: elara6331/distrohop
+      tags: ${platform##linux/}
+      cache: true
+      username: elara6331
+      password:
+        from_secret: gitea_token
+    when:
+      event: tag
+
+  - name: nfpm
+    image: goreleaser/nfpm
+    environment:
+      ARCH: ${platform##linux/}
+      VERSION: ${CI_COMMIT_TAG##v}
+    commands:
+      - nfpm pkg -f .nfpm.yaml -p deb -t .
+      - nfpm pkg -f .nfpm.yaml -p rpm -t .
+      - nfpm pkg -f .nfpm.yaml -p archlinux -t .
+    when:
+      event: tag
+  
+  - name: release
+    image: gitea.elara.ws/elara6331/woodpecker-release
+    settings:
+      title: "Version ${CI_COMMIT_TAG##v}"
+      files:
+        - '*.deb'
+        - '*.rpm'
+        - '*.tar.zst'
+      api_key:
+        from_secret: gitea_token
+    when:
+      event: tag

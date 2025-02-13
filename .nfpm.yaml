@@ -1,0 +1,20 @@
+name: distrohop
+description: "A utility for correlating and identifying equivalent software packages across different Linux distributions"
+homepage: 'https://gitea.elara.ws/Elara6331/distrohop'
+maintainer: 'Elara Ivy <elara@elara.ws>'
+license: AGPLv3
+arch: ${ARCH}
+version: ${VERSION}
+provides:
+  - distrohop
+conflicts:
+  - distrohop
+contents:
+  - src: distrohop
+    dst: /usr/bin/distrohop
+    file_info:
+      mode: 0755
+  - src: distrohop.service
+    dst: /etc/systemd/system/distrohop.service
+    file_info:
+      mode: 0644
