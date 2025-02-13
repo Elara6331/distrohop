@@ -8,7 +8,7 @@
 
 ---
 
-**DistroHop** is a tool that helps you compare Linux packages across different distributions. It lets you search for a package from one distro in another's repositories or look for a specific item you need.
+**DistroHop** is a tool that helps you compare Linux packages across different distributions. It lets you search for a package from one distro in another's repositories or look for a specific item you need. You can try it out at [hop.lure.sh](https://hop.lure.sh/)
 
 ## How does it work?
 
