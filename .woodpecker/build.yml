@@ -11,6 +11,8 @@ steps:
     image: golang:1.23.6
     commands:
       - go build
+    environment:
+      CGO_ENABLED: 0
     when:
       - event: tag
 
