@@ -1,6 +1,10 @@
 <p align="center">
     <img width="250" src="assets/logo/distrohop-text-bottom.svg">
 </p>
+<p align="center">
+    <img alt="GitHub go.mod Go version" src="https://img.shields.io/github/go-mod/go-version/Elara6331/distrohop?style=for-the-badge">&thinsp;
+    <a href="https://goreportcard.com/report/go.elara.ws/distrohop"><img src="https://goreportcard.com/badge/go.elara.ws/distrohop?style=for-the-badge"></a>
+</p>
 
 ---
 
