@@ -2,7 +2,7 @@
 iconset="${1%%:*}"
 icon="${1#*:}"
 
-BASE_DIR="./cmd/distrohop/assets/icons"
+BASE_DIR="./assets/icons"
 
 mkdir -p "$BASE_DIR/$iconset"
 wget -4 -O "$BASE_DIR/$iconset/$icon.svg" "https://api.iconify.design/$iconset/$icon.svg"
