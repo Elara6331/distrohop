@@ -96,7 +96,7 @@
 
             <div class="field mt-4 is-align-self-stretch">
                 <p class="control">
-                    <button class="button is-dark is-rounded is-fullwidth" type="submit">
+                    <button class="button is-info is-inverted is-rounded is-fullwidth" type="submit">
                         <div class="icon-text">
                             <span class="icon is-aligned m-0">#icon("map/search")</span>
                             <span>Search</span>
@@ -110,11 +110,17 @@
     <div x-cloak x-data="{tags: []}" x-transition:enter x-show="activeTab == 'tags'" class="columns">
         <div class="column is-half is-offset-one-quarter has-text-centered">
             <form action="/search/tags" x-ref="tagsForm">
+                <template x-if="tags.length == 0">
+                    <div class="has-text-centered">
+                        <p class="is-size-5">Tags you add will appear here...</p>
+                    </div>
+                </template>
+                
                 <div class="field is-grouped is-grouped-multiline">
                     <template x-for="(tag, idx) in tags">
                         <div>
                             <div class="tags has-addons">
-                                <span class="tag is-dark has-background-info-dark has-text-info-light" x-text="tag[0]"></span><span class="tag is-dark" x-text="tag[1]"></span><a class="tag is-delete m-0" @click.prevent="tags.splice(idx, 1)"></a>
+                                <span class="tag is-dark has-background-info-dark has-text-info-light" x-text="tag[0]"></span><span class="tag is-dark" x-text="tag[1]"></span><a class="tag is-dark is-delete m-0" @click.prevent="tags.splice(idx, 1)"></a>
                             </div>
                             <input class="is-hidden" name="tag" :value="tag.join('=')">
                         </div>
@@ -122,7 +128,17 @@
                     <span></span>
                 </div>
                 
-                <div class="mt-5 field has-addons">
+                <div class="icon-text mt-5 has-text-grey">
+                    <span class="icon is-aligned">#icon("material-symbols/info-outline")</span>
+                    <p class="is-size-7 has-text-grey">
+                        Try searching for
+                        <code class="is-clickable" @click="tags.push(['lib', 'pcre2-8'])">lib=pcre2-8</code>,
+                        <code class="is-clickable" @click="tags.push(['lib', 'libaudit.so.1'])">lib=libaudit.so.1</code>,
+                        <code class="is-clickable" @click="tags.push(['bin', 'firefox'])">bin=firefox</code>,
+                        etc.
+                    </p>
+                </div>
+                <div class="mt-0 field has-addons">
                     <div class="control is-expanded">
                         <input @keydown.comma.prevent="pushTag(tags, $refs.newTagInput)" class="input" x-ref="newTagInput" placeholder="bin=nano">
                     </div>
@@ -149,7 +165,7 @@
                     </p>
                 </div>
                 
-                <button class="button is-dark is-rounded is-fullwidth" type="submit">
+                <button class="button is-info is-inverted is-rounded is-fullwidth" type="submit">
                     <div class="icon-text">
                         <span class="icon is-aligned m-0">#icon("map/search")</span>
                         <span>Search</span>
