@@ -97,7 +97,7 @@ func main() {
 				if err == nil {
 					// Add the index store to the combined store for the repo
 					cs.Add(s)
-				} else if err != nil {
+				} else {
 					log.Error("Error opening database", slog.Any("error", err))
 					os.Exit(1)
 				}
