@@ -54,7 +54,15 @@
 
     <div x-cloak x-transition:enter x-show="activeTab == 'pkg'" class="columns">
         <form x-data="{'suggestions': []}" class="column is-half is-offset-one-quarter has-text-centered" action="/search/pkg">
-            <label class="label" for="from">Search For:</label>
+            <label class="label mb-0" for="from">Search For:</label>
+            <div class="icon-text has-text-grey">
+                <span class="icon is-aligned">#icon("material-symbols/info-outline")</span>
+                <p class="is-size-7 has-text-grey">
+                    Try searching for archlinux
+                    <a href="/search/pkg?from=archlinux&pkg=firefox&in=debian-bookworm"><code>firefox</code></a>
+                    in debian-bookworm.
+                </p>
+            </div>
             <div class="field has-addons is-align-self-stretch" id="from">
                 <div class="control">
                     <span class="select">
@@ -80,12 +88,11 @@
                 </div>
             </div>
 
-            <label class="label" for="in">In:</label>
             <div class="field is-align-self-stretch" id="in">
                 <p class="control">
                     <span class="select is-fullwidth">
                         <select name="in" autocomplete="off" required>
-                            <option selected disabled value="">Select Repo...</option>
+                            <option selected disabled value="">Search In...</option>
                             #for(repo in cfg.Repos):
                                 <option>#(repo.Name)</option>
                             #!for
