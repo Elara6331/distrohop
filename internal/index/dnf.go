@@ -51,7 +51,7 @@ func (r repomd) getGzipFile() string {
 			return loc.Href
 		}
 	}
-	return "<unknown>"
+	return ""
 }
 
 type DNF struct{}
