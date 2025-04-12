@@ -23,39 +23,47 @@
 package index
 
 import (
-	"fmt"
+	"encoding/xml"
+	"errors"
 	"io"
+	"net/http"
+	"net/url"
 )
 
-// Record represents a data record for a single package
-type Record struct {
-	Name  string
-	Tags  []string
-	Error error
-}
-
-type Importer interface {
-	// Name returns the name of the importer
-	Name() string
-	// IndexURL generates a list of possible index URLs to try
-	IndexURL(baseURL, version, repo, arch string) ([]string, error)
-	// ReadPkgData reads data from an index file and sends it on out
-	ReadPkgData(r io.Reader, out chan Record)
-}
-
-var importers = []Importer{
-	APT{},
-	DNF{},
-	Pacman{},
-	Zypper{},
-}
-
-// GetImporter gets an importer by its name
-func GetImporter(name string) (Importer, error) {
-	for _, importer := range importers {
-		if importer.Name() == name {
-			return importer, nil
-		}
+ type Zypper struct{}
+ 
+ func (Zypper) Name() string {
+	return "zypper"
+ }
+ 
+ func (Zypper) IndexURL(baseURL, version, repo, _ string) ([]string, error) {
+	u, err := url.ParseRequestURI(baseURL)
+	if err != nil {
+		return nil, err
 	}
-	return nil, fmt.Errorf("no such importer: %q", name)
-}
+	
+	repomdURL := u.JoinPath(version, "repo", repo, "repodata/repomd.xml")
+	res, err := http.Get(repomdURL.String())
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+ 
+	var data repomd
+	err = xml.NewDecoder(res.Body).Decode(&data)
+	if err != nil {
+		return nil, err
+	}
+ 
+	gzipFile := data.getFilelists()
+	if gzipFile == "" {
+		return nil, errors.New("no filelists found in repomd.xml")
+	}
+ 
+	filelistURL := u.JoinPath(version, "repo", repo, gzipFile)
+	return []string{filelistURL.String()}, nil
+ }
+ 
+ func (Zypper) ReadPkgData(r io.Reader, out chan Record) {
+ 	DNF{}.ReadPkgData(r, out)
+ }

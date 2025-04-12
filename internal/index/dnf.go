@@ -27,7 +27,6 @@ import (
 	"context"
 	"encoding/xml"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -36,23 +35,6 @@ import (
 	"github.com/mholt/archives"
 	"go.elara.ws/distrohop/internal/tags"
 )
-
-type repomd struct {
-	Locations []location `xml:"data>location"`
-}
-
-type location struct {
-	Href string `xml:"href,attr"`
-}
-
-func (r repomd) getGzipFile() string {
-	for _, loc := range r.Locations {
-		if strings.HasSuffix(loc.Href, "filelists.xml.gz") {
-			return loc.Href
-		}
-	}
-	return ""
-}
 
 type DNF struct{}
 
@@ -65,10 +47,9 @@ func (DNF) IndexURL(baseURL, version, repo, arch string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
-	repomdPath := fmt.Sprintf("/pub/fedora/linux/releases/%s/%s/%s/os/repodata/repomd.xml", version, repo, arch)
-	u.Path = repomdPath
-
-	res, err := http.Get(u.String())
+	
+	repomdURL := u.JoinPath("linux/releases", version, repo, arch, "os/repodata/repomd.xml")
+	res, err := http.Get(repomdURL.String())
 	if err != nil {
 		return nil, err
 	}
@@ -80,13 +61,13 @@ func (DNF) IndexURL(baseURL, version, repo, arch string) ([]string, error) {
 		return nil, err
 	}
 
-	gzipFile := data.getGzipFile()
-	if gzipFile == "" {
-		return nil, errors.New("no gzip file found in repomd.xml")
+	filelists := data.getFilelists()
+	if filelists == "" {
+		return nil, errors.New("no filelists found in repomd.xml")
 	}
-
-	u.Path = fmt.Sprintf("/pub/fedora/linux/releases/%s/%s/%s/os/%s", version, repo, arch, gzipFile)
-	return []string{u.String()}, nil
+	
+	filelistsURL := u.JoinPath("linux/releases", version, repo, arch, "os", filelists)
+	return []string{filelistsURL.String()}, nil
 }
 
 func (DNF) ReadPkgData(r io.Reader, out chan Record) {
